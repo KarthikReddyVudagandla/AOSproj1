@@ -1,3 +1,4 @@
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
@@ -9,7 +10,7 @@ public class TCPClient {
   public TCPClient(NodeInfo NIobj,int curNode) {
 		for(int i=0;i<NIobj.numOfNodes;i++){
 			if(NIobj.adjMtx[curNode][i] == 1){
-				System.out.println("connecting nodes "+curNode+" "+i);
+				System.out.println("connecting nodes "+curNode+"'s client to server of "+i);
 				String hostName = NIobj.nodeInfo.get(i).host;
 				int port = NIobj.nodeInfo.get(i).port;
 				InetAddress address = null;
@@ -33,11 +34,19 @@ public class TCPClient {
 //				NIobj.channels.put(i, client);
 //				NIobj.neighbors.add(i);
 				ObjectOutputStream oos = null;
+				//DataOutputStream dos=null;
+				StreamMsg m= new StreamMsg();
+				m.msg="Hi, this is a msg";
+				m.NodeId= curNode;
+				
 				try {
 					oos = new ObjectOutputStream(client.getOutputStream());
+					oos.writeObject(m);
+					oos.flush();
+					
 					System.out.println(oos);
 				} catch (IOException e) {
-					
+					System.out.println("cant send this msg");
 					e.printStackTrace();
 				}
 			//	NIobj.oStream.put(i, oos);	

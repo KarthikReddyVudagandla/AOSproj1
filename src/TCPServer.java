@@ -36,12 +36,13 @@ public void listenforinput(){
 		while (true) {
 			try {
 				socket = listener.accept();
+				System.out.println("Client connection accepted by server"+NIobj.id);
 			} catch (IOException e1) {
 				System.out.println("Connection Broken");
 				System.exit(1);
 			}
 			// For every client request start a new thread 
-			//new ReceiveThread(socket,mapObject).start();
+			new RunInThread(socket,NIobj).run();
 		}
 	}
 	finally {
