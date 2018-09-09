@@ -4,7 +4,7 @@ public class Main {
 
 	public static void main(String[] args) throws IOException,InterruptedException  {
 		// TODO Auto-generated method stub
-     NodeInfo NIobj = ReadConfigFile.readConfigFile(args[1]);
+     NodeInfo NIobj = ReadConfigFile.readConfigFile(Integer.parseInt(args[0]),args[1]);
      
      NIobj.id= Integer.parseInt(args[0]);
      int curNode= NIobj.id;
@@ -18,7 +18,6 @@ public class Main {
      new TCPClient(NIobj,curNode);
      
      server.listenforinput();
-     
      
      
 	}

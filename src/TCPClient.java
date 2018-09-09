@@ -32,12 +32,13 @@ public class TCPClient {
 				}
 				//Send client request to all neighboring nodes
 //				NIobj.channels.put(i, client);
-//				NIobj.neighbors.add(i);
+				NIobj.neighbors.add(i);
 				ObjectOutputStream oos = null;
 				//DataOutputStream dos=null;
 				StreamMsg m= new StreamMsg();
 				m.msg="Hi, this is a msg";
 				m.NodeId= curNode;
+				m.neighbors=NIobj.neighbors;
 				
 				try {
 					oos = new ObjectOutputStream(client.getOutputStream());

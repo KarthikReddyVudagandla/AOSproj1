@@ -27,7 +27,8 @@ public void run() {
 		
 		StreamMsg msg;
 		msg=(StreamMsg) ois.readObject();
-		System.out.println(NIobj.id+"says: "+msg.NodeId +" said "+msg.msg);
+		System.out.println(NIobj.id+"says: "+msg.NodeId +" said "+msg.msg +" and");
+		System.out.println(msg.NodeId+ "'s neighbours are "+msg.neighbors);
 	}catch(StreamCorruptedException e) {
 		e.printStackTrace();
 		System.exit(2);

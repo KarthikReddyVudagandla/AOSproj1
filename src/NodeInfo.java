@@ -6,9 +6,13 @@ import java.util.HashMap;
 public class NodeInfo {
 
 	int numOfNodes;
+	boolean ConnDone;
 	int[][] adjMtx;	
+	int ClientConnectionCount[];
 	int id;
 	ArrayList<Integer> neighbors;
+	//int ConnCount;
+	//ArrayList<Integer>[][] Khop=new ArrayList<>[][]();
 	
 	//Mapping between process number as keys and <id,host,port> as value
 	HashMap<Integer,Node> nodeInfo;
@@ -17,12 +21,16 @@ public class NodeInfo {
 		// Mapping between each process as a server and its client connections
 		HashMap<Integer,Socket> channels;
 		
+		
+		
 	//ArrayList which holds the total processes(nodes) 
 	ArrayList<Node> nodes;
 public NodeInfo() {
 	nodes = new ArrayList<Node>();	
 	nodeInfo = new HashMap<Integer,Node>();
 	neighbors = new ArrayList<>();
+	
+	ConnDone=false;
 }
 
 }

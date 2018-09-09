@@ -5,11 +5,13 @@ import java.io.IOException;
 
 public class ReadConfigFile {
 
-   public static NodeInfo readConfigFile(String name) throws IOException
+   public static NodeInfo readConfigFile(int id,String name) throws IOException
    {
 	 NodeInfo file=new NodeInfo();
+	 file.id=id;
 	 int node_count=0,next=0;
 	 int curNode=0;
+	// int ConnCount=0;
 	 
 	 String fileName=System.getProperty("user.dir") + "/" + name;
 	 
@@ -37,6 +39,7 @@ public class ReadConfigFile {
 					//System.out.println(config_input[0]);
      				file.numOfNodes= Integer.parseInt(config_input[0]);
      				file.adjMtx = new int[file.numOfNodes][file.numOfNodes];//init adj matrix
+     				file.ClientConnectionCount= new int[file.numOfNodes];
      				next++;
 				}
 				else if(next == 1 && node_count < file.numOfNodes) {
@@ -52,12 +55,21 @@ public class ReadConfigFile {
 						if(curNode != Integer.parseInt(i)) {
 							file.adjMtx[curNode][Integer.parseInt(i)] = 1;
 							file.adjMtx[Integer.parseInt(i)][curNode] = 1;
+							if(file.id==curNode) {
+								//ConnCount++;
+							file.ClientConnectionCount[file.id]= config_input.length-1;}
+								//file.ConnCount++;
 						}
 					}
 					curNode++;
+					
+					//System.out.println(ConnCount);
+					//file.ClientConnectionCount[file.id]= config_input.length-1;
+					
 				}
 				
 			}
+			System.out.println(file.id+"conn "+file.ClientConnectionCount[file.id]);
 			br.close(); 		 
 		 
 	 }catch(FileNotFoundException e) {

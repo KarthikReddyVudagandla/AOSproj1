@@ -32,11 +32,21 @@ public TCPServer(NodeInfo NIobj) {
 }	
 public void listenforinput(){
 	//Listen and accept for any client connections
+	int count=0;
 	try {
 		while (true) {
 			try {
 				socket = listener.accept();
-				System.out.println("Client connection accepted by server"+NIobj.id);
+				count++;
+				System.out.println("Client connection accepted by server"+NIobj.id+" #connections= "+ count + " "+NIobj.ClientConnectionCount[NIobj.id]);
+				
+				if(count==NIobj.ClientConnectionCount[NIobj.id])
+				{
+					System.out.println("Connections Done");
+					NIobj.ConnDone=true;
+					System.out.println("id: "+ NIobj.id+" neighbours "+ NIobj.neighbors + " connections Done is "+NIobj.ConnDone);
+					
+				}
 			} catch (IOException e1) {
 				System.out.println("Connection Broken");
 				System.exit(1);
