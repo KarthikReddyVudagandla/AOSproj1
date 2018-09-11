@@ -5,7 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.StreamCorruptedException;
 import java.net.Socket;
 
-public class RunInThread {
+public class RunInThread extends Thread {
 Socket socket;
 NodeInfo NIobj;
 

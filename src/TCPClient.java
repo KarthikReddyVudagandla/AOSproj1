@@ -31,14 +31,14 @@ public class TCPClient {
 					System.exit(1);
 				}
 				//Send client request to all neighboring nodes
-//				NIobj.channels.put(i, client);
+				NIobj.channels.put(i, client);
 				NIobj.neighbors.add(i);
 				ObjectOutputStream oos = null;
 				//DataOutputStream dos=null;
 				StreamMsg m= new StreamMsg();
-				m.msg="Hi, this is a msg";
-				m.NodeId= curNode;
-				m.neighbors=NIobj.neighbors;
+				//m.msg="Hi, this is a msg";
+				//m.NodeId= curNode;
+				m.phaseNeighbors=NIobj.neighbors;
 				
 				try {
 					oos = new ObjectOutputStream(client.getOutputStream());

@@ -52,7 +52,7 @@ public void listenforinput(){
 				System.exit(1);
 			}
 			// For every client request start a new thread 
-			new RunInThread(socket,NIobj).run();
+			 new RunInThread(socket,NIobj).start();
 		}
 	}
 	finally {

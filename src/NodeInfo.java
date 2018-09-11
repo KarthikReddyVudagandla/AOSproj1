@@ -29,6 +29,7 @@ public NodeInfo() {
 	nodes = new ArrayList<Node>();	
 	nodeInfo = new HashMap<Integer,Node>();
 	neighbors = new ArrayList<>();
+	channels= new HashMap<Integer,Socket>();
 	
 	ConnDone=false;
 }

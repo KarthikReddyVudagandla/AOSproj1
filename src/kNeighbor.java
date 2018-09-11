@@ -1,26 +1,32 @@
-class Message{
-	//int phaseNo;
-	ArrayList<int> phaseNeighbors;
-};
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.concurrent.locks.Lock;
+
+//class Message{
+//	//Integer phaseNo;
+//	ArrayList<Integer> phaseNeighbors;
+//};
 
 //This algorithm works in phases
 //First send all immediate neighbors the new nodes added in the last phase, then receive the same
 //Second send okay to mark end of phase and start new phase only when okay received from all immediate neighbors
 class kNeighbor{
 	Lock l;
-	ArrayList<ArrayList<int>> kHopNeighbors;
-	int phase;//current phase
-	HashSet<int> nieghborsDiscovered;//hashset to ensure no node is added twice
-	int immediateNeighbors;
-	int currentPhaseReceived;//variable to keep track of how many immediate neighbors contacted this node
-	int okayReceived;//varialbe to keep track of how many immediate neighbors have sent okay
-	bool change;//variable to check if any change occurred in current phase
-	bool terminate;//varaible to track end of algorithm
+	Integer nodeid;
+	ArrayList<ArrayList<Integer>> kHopNeighbors;
+	Integer phase;//current phase
+	HashSet<Integer> neighborsDiscovered;//hashset to ensure no node is added twice
+	Integer immediateNeighbors;
+	Integer currentPhaseReceived;//variable to keep track of how many immediate neighbors contacted this node
+	Integer okayReceived;//varialbe to keep track of how many immediate neighbors have sent okay
+	boolean change;//variable to check if any change occurred in current phase
+	boolean terminate;//varaible to track end of algorithm
 	
-	kNeighbor(int neighborCount){
-		kHopNeighbors = new ArrayList<ArrayList<int>>>();
+	kNeighbor(Integer nodeid, Integer neighborCount){
+		kHopNeighbors = new ArrayList<ArrayList<Integer>>();
 		phase = 0;
-		neighborsDiscovered = new HashSet<int>();
+		this.nodeid = nodeid;
+		neighborsDiscovered = new HashSet<Integer>();
 		immediateNeighbors = neighborCount;
 		currentPhaseReceived = 0;
 		okayReceived = 0;
@@ -28,23 +34,23 @@ class kNeighbor{
 	}
 	
 	void start(){
-		Message m = new Message();
+		StreamMsg m = new StreamMsg();
 		m.phaseNeighbors = new ArrayList();
 		m.phaseNeighbors.add(nodeid);
-		send(m);
+		this.send(m);
 	}
 	
 	//Upon receiving a new message
-	void receive(Message m){
+	void receive(StreamMsg m){
 		l.lock();
-		for(int phaseNeighbor : m.phaseNeighbors){
+		for(Integer phaseNeighbor : m.phaseNeighbors){
 			//Check if neighbor is already discovered
 			if(!neighborsDiscovered.contains(phaseNeighbor)){
 				change = true;
 				if(kHopNeighbors.size() < phase){
-					kHopNeighbors.add(new ArrayList<int>());
-					kHopNeighbors[phase].add(phaseNeighbor);
-					nieghborsDiscovered.add(phaseNeighbor);
+					kHopNeighbors.add(new ArrayList<Integer>());
+					kHopNeighbors.get(phase).add(phaseNeighbor);
+					neighborsDiscovered.add(phaseNeighbor);
 				}			
 			}
 		}
@@ -62,8 +68,8 @@ class kNeighbor{
 		l.unlock();
 	}
 	
-	void send(Message m){
-		for()
+	void send(StreamMsg m){
+//		for() {}
 	}
 	
 	void sendOkay(){
@@ -74,9 +80,9 @@ class kNeighbor{
 		l.lock();
 		okayReceived++;
 		if(okayReceived == immediateNeighbors){
-			Message m = new Message();
+			StreamMsg m = new StreamMsg();
 			//m.phaseNo = phase;
-			m.phaseNeighbors = kHopNeighbors[phase-1];
+			m.phaseNeighbors = kHopNeighbors.get(phase-1);
 			send(m);
 			okayReceived = 0;
 		}
