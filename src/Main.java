@@ -22,5 +22,38 @@ public class Main {
      
 	}
 
+     // broadCast methods still needs some work
+
+//   public broadCast(message m)
+//   {
+//   // Loop through Array list 'neighbors' (from Nodeinfo.java file)
+//   // Loop through socket neighbour, send message 'm' to socket 's'
+//   for (; ; ) {
+//        sendMessage(socket s, message m);
+//   }
+//   }
+
+
+// sendMessage - Converts message 'm' to to OutputStream 
+     public sendMessage(socket s, message m)
+     {
+     // Send Message 'm' through socket 's'
+               try {
+                         oos = new ObjectOutputStream(s.getOutputStream());
+                         oos.writeObject(m);
+                         oos.flush();
+                         
+                         System.out.println(oos);
+                    } 
+
+               catch (IOException e)
+                    {
+                         System.out.println("cant send this msg");
+                         e.printStackTrace();
+                    }
+
+     }
+
+
 }
  
