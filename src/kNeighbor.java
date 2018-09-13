@@ -19,7 +19,7 @@ public class kNeighbor{
 	Integer currentPhaseReceived;//variable to keep track of how many immediate neighbors contacted this node
 	Integer okayReceived;//varialbe to keep track of how many immediate neighbors have sent okay
 	boolean change;//variable to check if any change occurred in current phase
-	boolean terminate;//varaible to track end of algorithm
+	boolean toTerminate;//varaible to track end of algorithm
 	Broadcaster b;
 	
 	kNeighbor(Integer nodeid, Integer neighborCount, Broadcaster broadcaster){
@@ -32,6 +32,7 @@ public class kNeighbor{
 		okayReceived = 0;
 		change = false;
 		b = broadcaster;
+		toTerminate = false;
 	}
 	
 	void start(){
@@ -61,6 +62,7 @@ public class kNeighbor{
 			if(currentPhaseReceived == immediateNeighbors){
 				if(!change){
 					//Terminate
+					terminate();
 				}
 				StreamMsg m = new StreamMsg();
 				m.type = okay;
@@ -86,5 +88,9 @@ public class kNeighbor{
 	
 	void send(StreamMsg m){
 		b.broadcast(m);
+	}
+	
+	void terminate(){
+		toTerminate = true;
 	}
 };
