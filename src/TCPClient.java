@@ -8,7 +8,8 @@ import java.net.UnknownHostException;
 public class TCPClient {
 
   public TCPClient(NodeInfo NIobj,int curNode) {
-		for(int i=0;i<NIobj.numOfNodes;i++){
+		//for(int i=0;i<NIobj.numOfNodes;i++){
+	     for(int i=0;i<curNode;i++){
 			if(NIobj.adjMtx[curNode][i] == 1){
 				System.out.println("connecting nodes "+curNode+"'s client to server of "+i);
 				String hostName = NIobj.nodeInfo.get(i).host;
@@ -31,7 +32,7 @@ public class TCPClient {
 					System.exit(1);
 				}
 				//Send client request to all neighboring nodes
-				NIobj.channels.put(i, client);
+				NIobj.channels.add( client);
 				NIobj.neighbors.add(i);
 				ObjectOutputStream oos = null;
 				//DataOutputStream dos=null;

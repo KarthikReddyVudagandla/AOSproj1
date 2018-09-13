@@ -1,4 +1,6 @@
 import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
 
 public class Main {
 
@@ -35,9 +37,11 @@ public class Main {
 
 
 // sendMessage - Converts message 'm' to to OutputStream 
-     public sendMessage(socket s, message m)
+     public void sendMessage(Socket s, StreamMsg m)
      {
      // Send Message 'm' through socket 's'
+    	 ObjectOutputStream oos=null;
+    	 
                try {
                          oos = new ObjectOutputStream(s.getOutputStream());
                          oos.writeObject(m);
