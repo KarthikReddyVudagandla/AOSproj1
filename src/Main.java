@@ -2,11 +2,11 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-public class Main {
-
+public class Main{
+	 static NodeInfo NIobj;
 	public static void main(String[] args) throws IOException,InterruptedException  {
 		// TODO Auto-generated method stub
-     NodeInfo NIobj = ReadConfigFile.readConfigFile(Integer.parseInt(args[0]),args[1]);
+      NIobj = ReadConfigFile.readConfigFile(Integer.parseInt(args[0]),args[1]);
      
      NIobj.id= Integer.parseInt(args[0]);
      int curNode= NIobj.id;
@@ -19,44 +19,28 @@ public class Main {
      
      new TCPClient(NIobj,curNode);
      
+     
+     StreamMsg m=new StreamMsg();
+     m.type=MsgType.neighbor;
+     m.phaseNeighbors=NIobj.neighbors;
+     
+   
+    
+     
      server.listenforinput();
      
+     BroadCast b= new BroadCast(NIobj.channels);
+     b.broadcast(m);
+    
      
 	}
 
      // broadCast methods still needs some work
 
-//   public broadCast(message m)
-//   {
-//   // Loop through Array list 'neighbors' (from Nodeinfo.java file)
-//   // Loop through socket neighbour, send message 'm' to socket 's'
-//   for (; ; ) {
-//        sendMessage(socket s, message m);
-//   }
-//   }
+  
 
 
-// sendMessage - Converts message 'm' to to OutputStream 
-     public void sendMessage(Socket s, StreamMsg m)
-     {
-     // Send Message 'm' through socket 's'
-    	 ObjectOutputStream oos=null;
-    	 
-               try {
-                         oos = new ObjectOutputStream(s.getOutputStream());
-                         oos.writeObject(m);
-                         oos.flush();
-                         
-                         System.out.println(oos);
-                    } 
 
-               catch (IOException e)
-                    {
-                         System.out.println("cant send this msg");
-                         e.printStackTrace();
-                    }
-
-     }
 
 
 }
