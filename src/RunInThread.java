@@ -8,10 +8,12 @@ import java.net.Socket;
 public class RunInThread extends Thread {
 Socket socket;
 NodeInfo NIobj;
+kNeighbor kN;
 
-public RunInThread(Socket socket,NodeInfo NIobj ) {
+public RunInThread(Socket socket,NodeInfo NIobj, kNeighbor kN) {
 	this.socket=socket;
 	this.NIobj=NIobj;	
+	this.kN = kN;
 }
 
 public void run() {
@@ -27,15 +29,16 @@ public void run() {
 		
 		StreamMsg msg;
 		msg=(StreamMsg) ois.readObject();
-		if(msg.type == MsgType.okay) {
-			System.out.println("okay msg recvd");
-		}
-		else if(msg.type == MsgType.neighbor)
-		{
-			
-			System.out.println("neighbours msg recvd "+ msg.phaseNeighbors);
-			
-		}
+		kN.receive(msg);
+//		if(msg.type == MsgType.okay) {
+//			System.out.println("okay msg recvd");
+//		}
+//		else if(msg.type == MsgType.neighbor)
+//		{
+//			
+//			System.out.println("neighbours msg recvd from "+socket.getRemoteSocketAddress().toString() +" "+ msg.phaseNeighbors);
+//			
+//		}
 //		System.out.println(NIobj.id+"says: "+msg.NodeId +" said "+msg.msg +" and");
 //		System.out.println(msg.NodeId+ "'s neighbours are "+msg.neighbors);
 		

@@ -33,25 +33,14 @@ public class TCPClient {
 				}
 				//Send client request to all neighboring nodes
 				NIobj.channels.add( client);
-				NIobj.neighbors.add(i);
-				ObjectOutputStream oos = null;
-				//DataOutputStream dos=null;
-				StreamMsg m= new StreamMsg();
-				//m.msg="Hi, this is a msg";
-				//m.NodeId= curNode;
-				m.phaseNeighbors=NIobj.neighbors;
+				//NIobj.neighbors.add(i);
+				// For every client request start a new thread 
+				 new RunInThread(client,NIobj).start();
+				 
 				
-				try {
-					oos = new ObjectOutputStream(client.getOutputStream());
-					oos.writeObject(m);
-					oos.flush();
-					
-					System.out.println(oos);
-				} catch (IOException e) {
-					System.out.println("cant send this msg");
-					e.printStackTrace();
-				}
-			//	NIobj.oStream.put(i, oos);	
+				
+			
+
 			}
 		}	 
 	  
