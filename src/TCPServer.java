@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.net.BindException;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -38,6 +39,10 @@ public void listenforinput(){
 			try {
 				socket = listener.accept();
 				count++;
+//				InetAddress address=socket.getInetAddress();
+//				
+//				System.out.println(address.getHostName());
+				NIobj.channels.add(socket);
 				System.out.println("Client connection accepted by server"+NIobj.id+" #connections= "+ count + " "+NIobj.ClientConnectionCount[NIobj.id]);
 				
 				if(count==NIobj.ClientConnectionCount[NIobj.id])
