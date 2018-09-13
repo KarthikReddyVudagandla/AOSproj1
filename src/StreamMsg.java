@@ -6,4 +6,3 @@ public class StreamMsg implements Serializable {
 	MsgType type;
 	ArrayList<Integer> phaseNeighbors;
 }
-

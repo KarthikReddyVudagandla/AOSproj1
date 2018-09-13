@@ -44,50 +44,47 @@ public class kNeighbor{
 	//Upon receiving a new message
 	void receive(StreamMsg m){
 		l.lock();
-		for(Integer phaseNeighbor : m.phaseNeighbors){
-			//Check if neighbor is already discovered
-			if(!neighborsDiscovered.contains(phaseNeighbor)){
-				change = true;
-				if(kHopNeighbors.size() < phase){
-					kHopNeighbors.add(new ArrayList<Integer>());
+		if(m.type == neighbor){				
+			for(Integer phaseNeighbor : m.phaseNeighbors){
+				//Check if neighbor is already discovered
+				if(!neighborsDiscovered.contains(phaseNeighbor)){
+					change = true;
+					if(kHopNeighbors.size() < phase){
+						kHopNeighbors.add(new ArrayList<Integer>());
+					}			
 					kHopNeighbors.get(phase).add(phaseNeighbor);
 					neighborsDiscovered.add(phaseNeighbor);
-				}			
+				}
+			}
+			
+			currentPhaseReceived++;
+			if(currentPhaseReceived == immediateNeighbors){
+				if(!change){
+					//Terminate
+				}
+				StreamMsg m = new StreamMsg();
+				m.type = okay;
+				send(m);
+				phase++;
+				currentPhaseReceived = 0;//reset
+				change = false;
 			}
 		}
-		
-		currentPhaseReceived++;
-		if(currentPhaseReceived == immediateNeighbors){
-			if(!change){
-				//Terminate
-			}
-			sendOkay();
-			phase++;
-			currentPhaseReceived = 0;//reset
-			change = false;
-		}
-		l.unlock();
-	}
-	
-	
-	void receiveOkay(){
-		l.lock();
-		okayReceived++;
-		if(okayReceived == immediateNeighbors){
-			StreamMsg m = new StreamMsg();
-			//m.phaseNo = phase;
-			m.phaseNeighbors = kHopNeighbors.get(phase-1);
-			send(m);
-			okayReceived = 0;
+		else if(m.type == okay){
+			okayReceived++;
+			if(okayReceived == immediateNeighbors){
+				StreamMsg m = new StreamMsg();
+				//m.phaseNo = phase;
+				m.type = neighbor;
+				m.phaseNeighbors = kHopNeighbors.get(phase-1);
+				send(m);
+				okayReceived = 0;
+			}			
 		}
 		l.unlock();
 	}
 	
 	void send(StreamMsg m){
-
-	}
-	
-	void sendOkay(){
-		
+		b.broadcast(m);
 	}
 };
