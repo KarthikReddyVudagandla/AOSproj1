@@ -19,7 +19,7 @@ public void run() {
 	//DataInputStream dis=null;
 	try {
 		ois = new ObjectInputStream(socket.getInputStream());
-				
+		System.out.println("Msg recvd");		
 	} catch (IOException e1) {
 		e1.printStackTrace();
 	}
@@ -28,11 +28,12 @@ public void run() {
 		StreamMsg msg;
 		msg=(StreamMsg) ois.readObject();
 		if(msg.type == MsgType.okay) {
-			
+			System.out.println("okay msg recvd");
 		}
 		else if(msg.type == MsgType.neighbor)
 		{
 			
+			System.out.println("neighbours msg recvd "+ msg.phaseNeighbors);
 			
 		}
 //		System.out.println(NIobj.id+"says: "+msg.NodeId +" said "+msg.msg +" and");

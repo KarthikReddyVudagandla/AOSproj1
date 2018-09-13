@@ -35,7 +35,7 @@ public void listenforinput(){
 	//Listen and accept for any client connections
 	int count=0;
 	try {
-		while (true) {
+		while (NIobj.ClientConnectionCount[NIobj.id]!=NIobj.channels.size()) {
 			try {
 				socket = listener.accept();
 				count++;
@@ -43,6 +43,7 @@ public void listenforinput(){
 //				
 //				System.out.println(address.getHostName());
 				NIobj.channels.add(socket);
+				
 				System.out.println("Client connection accepted by server"+NIobj.id+" #connections= "+ count + " "+NIobj.ClientConnectionCount[NIobj.id]);
 				
 				if(count==NIobj.ClientConnectionCount[NIobj.id])

@@ -2,9 +2,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.concurrent.locks.Lock;
 
-public interface Broadcaster{
-	void broadcast(StreamMsg m);
-}
+
 
 //This algorithm works in phases
 //First send all immediate neighbors the new nodes added in the last phase, then receive the same
@@ -45,7 +43,7 @@ public class kNeighbor{
 	//Upon receiving a new message
 	void receive(StreamMsg m){
 		l.lock();
-		if(m.type == neighbor){				
+		if(m.type == MsgType.neighbor){				
 			for(Integer phaseNeighbor : m.phaseNeighbors){
 				//Check if neighbor is already discovered
 				if(!neighborsDiscovered.contains(phaseNeighbor)){
@@ -64,22 +62,22 @@ public class kNeighbor{
 					//Terminate
 					terminate();
 				}
-				StreamMsg m = new StreamMsg();
-				m.type = okay;
-				send(m);
+				StreamMsg m2 = new StreamMsg();
+				m2.type = MsgType.okay;
+				send(m2);
 				phase++;
 				currentPhaseReceived = 0;//reset
 				change = false;
 			}
 		}
-		else if(m.type == okay){
+		else if(m.type == MsgType.okay){
 			okayReceived++;
 			if(okayReceived == immediateNeighbors){
-				StreamMsg m = new StreamMsg();
+				StreamMsg m1 = new StreamMsg();
 				//m.phaseNo = phase;
-				m.type = neighbor;
-				m.phaseNeighbors = kHopNeighbors.get(phase-1);
-				send(m);
+				m1.type = MsgType.neighbor;
+				m1.phaseNeighbors = kHopNeighbors.get(phase-1);
+				send(m1);
 				okayReceived = 0;
 			}			
 		}
