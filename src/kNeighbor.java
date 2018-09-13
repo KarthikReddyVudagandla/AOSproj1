@@ -2,15 +2,14 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.concurrent.locks.Lock;
 
-//class Message{
-//	//Integer phaseNo;
-//	ArrayList<Integer> phaseNeighbors;
-//};
+public interface Broadcaster{
+	void broadcast(StreamMsg m);
+}
 
 //This algorithm works in phases
 //First send all immediate neighbors the new nodes added in the last phase, then receive the same
 //Second send okay to mark end of phase and start new phase only when okay received from all immediate neighbors
-class kNeighbor{
+public class kNeighbor{
 	Lock l;
 	Integer nodeid;
 	ArrayList<ArrayList<Integer>> kHopNeighbors;
@@ -21,8 +20,9 @@ class kNeighbor{
 	Integer okayReceived;//varialbe to keep track of how many immediate neighbors have sent okay
 	boolean change;//variable to check if any change occurred in current phase
 	boolean terminate;//varaible to track end of algorithm
+	Broadcaster b;
 	
-	kNeighbor(Integer nodeid, Integer neighborCount){
+	kNeighbor(Integer nodeid, Integer neighborCount, Broadcaster broadcaster){
 		kHopNeighbors = new ArrayList<ArrayList<Integer>>();
 		phase = 0;
 		this.nodeid = nodeid;
@@ -31,6 +31,7 @@ class kNeighbor{
 		currentPhaseReceived = 0;
 		okayReceived = 0;
 		change = false;
+		b = broadcaster;
 	}
 	
 	void start(){
@@ -68,13 +69,6 @@ class kNeighbor{
 		l.unlock();
 	}
 	
-	void send(StreamMsg m){
-//		for() {}
-	}
-	
-	void sendOkay(){
-		
-	}
 	
 	void receiveOkay(){
 		l.lock();
@@ -87,5 +81,13 @@ class kNeighbor{
 			okayReceived = 0;
 		}
 		l.unlock();
+	}
+	
+	void send(StreamMsg m){
+
+	}
+	
+	void sendOkay(){
+		
 	}
 };
