@@ -42,6 +42,7 @@ public class kNeighbor{
 	
 	//Upon receiving a new message
 	void receive(StreamMsg m){
+		if(toTerminate) return;
 		l.lock();
 		if(m.type == MsgType.neighbor){				
 			for(Integer phaseNeighbor : m.phaseNeighbors){
@@ -62,9 +63,9 @@ public class kNeighbor{
 					//Terminate
 					terminate();
 				}
-				StreamMsg m2 = new StreamMsg();
-				m2.type = MsgType.okay;
-				send(m2);
+				StreamMsg okayMessage = new StreamMsg();
+				okayMessage.type = MsgType.okay;
+				send(okayMessage);
 				phase++;
 				currentPhaseReceived = 0;//reset
 				change = false;
@@ -90,5 +91,8 @@ public class kNeighbor{
 	
 	void terminate(){
 		toTerminate = true;
+		StreamMsg terminateMessage = new StreamMsg();
+		terminateMessage.type = MsgType.terminate;
+		send(m);
 	}
 };
