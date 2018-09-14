@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 
 
@@ -9,7 +9,7 @@ import java.util.concurrent.locks.Lock;
 //Second send okay to mark end of phase and start new phase only when okay received from all immediate neighbors
 //Terminate messages should only be sent in okay phase
 public class kNeighbor implements MsgListener {
-	Lock l;
+	ReentrantLock l;
 	Integer nodeid;
 	ArrayList<ArrayList<Integer>> kHopNeighbors;
 	Integer phase;//current phase
@@ -24,6 +24,7 @@ public class kNeighbor implements MsgListener {
 	Broadcaster b;
 	
 	public kNeighbor(Integer nodeid, Integer neighborCount, Broadcaster broadcaster){
+		l = new ReentrantLock();		
 		kHopNeighbors = new ArrayList<ArrayList<Integer>>();
 		phase = 0;
 		this.nodeid = nodeid;

@@ -28,6 +28,7 @@ public class Main{
 		}
 		
 		kn.start();
+		RunInThread.joinAllThreads();
 	}
 
 }

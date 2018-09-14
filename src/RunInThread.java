@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -14,6 +15,7 @@ public class RunInThread extends Thread {
 		this.socket=socket;
 		this.NIobj=NIobj;	
 		this.l = l;
+		activeThreads.add(this);
 	}
 
 	public void run() {
@@ -47,7 +49,17 @@ public class RunInThread extends Thread {
 			System.exit(2);
 		} 				
 	}
+
+	static ArrayList<Thread> activeThreads = new ArrayList<Thread>();
+
+	public static void joinAllThreads(){
+		try{
+			for(Thread t : activeThreads){
+				t.join();
+			}
+		}
+		catch(InterruptedException e){
+			e.printStackTrace();
+		}
+	}
 }
-
-
-
