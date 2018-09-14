@@ -10,7 +10,8 @@ public class BroadCast implements Broadcaster{
 		channels = new ArrayList<Socket>();
 	}
 	
-	public void addSocket(Scoket s){
+
+	public void addSocket(Socket s){
 		channels.add(s);
 	}
 	

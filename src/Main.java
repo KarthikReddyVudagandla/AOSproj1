@@ -24,7 +24,7 @@ public class Main{
 		while (NIobj.ClientConnectionCount[NIobj.id] != NIobj.channels.size());
 		
 		for(Socket socket : NIobj.channels){
-			broadCast.addSocket(socket);
+			b.addSocket(socket);
 		}
 		
 		kn.start();

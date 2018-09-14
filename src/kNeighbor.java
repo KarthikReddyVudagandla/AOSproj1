@@ -8,7 +8,7 @@ import java.util.concurrent.locks.Lock;
 //First send all immediate neighbors the new nodes added in the last phase, then receive the same
 //Second send okay to mark end of phase and start new phase only when okay received from all immediate neighbors
 //Terminate messages should only be sent in okay phase
-public class kNeighbor implements MsgListener{
+public class kNeighbor implements MsgListener {
 	Lock l;
 	Integer nodeid;
 	ArrayList<ArrayList<Integer>> kHopNeighbors;
@@ -47,7 +47,7 @@ public class kNeighbor implements MsgListener{
 	
 	//Upon receiving a new message
 	@Override
-	void receive(StreamMsg m){
+	public void receive(StreamMsg m){
 		if(terminated) return;
 		l.lock();
 		if(m.type == MsgType.terminate){
@@ -85,7 +85,7 @@ public class kNeighbor implements MsgListener{
 				change = false;
 			}
 		}
-		else if(m.type == MsgType.okay || m.type = MsgType.terminate){
+		else if(m.type == MsgType.okay || m.type == MsgType.terminate){
 			okayReceived++;
 			if(okayReceived == immediateNeighbors){
 				StreamMsg m1 = new StreamMsg();
