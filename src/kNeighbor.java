@@ -20,7 +20,7 @@ public class kNeighbor{
 	boolean toTerminate;//varaible to track end of algorithm
 	Broadcaster b;
 	
-	kNeighbor(Integer nodeid, Integer neighborCount, Broadcaster broadcaster){
+	public kNeighbor(Integer nodeid, Integer neighborCount, Broadcaster broadcaster){
 		kHopNeighbors = new ArrayList<ArrayList<Integer>>();
 		phase = 0;
 		this.nodeid = nodeid;
@@ -33,9 +33,9 @@ public class kNeighbor{
 		toTerminate = false;
 	}
 	
-	void start(){
+	public void start(){
 		StreamMsg m = new StreamMsg();
-		m.phaseNeighbors = new ArrayList();
+		m.phaseNeighbors = new ArrayList<Integer>();
 		m.phaseNeighbors.add(nodeid);
 		this.send(m);
 	}
@@ -63,6 +63,7 @@ public class kNeighbor{
 					//Terminate
 					terminate();
 				}
+				System.out.println("kHopNeighbors phase "+phase+"; neighbours "+kHopNeighbors.get(phase));
 				StreamMsg okayMessage = new StreamMsg();
 				okayMessage.type = MsgType.okay;
 				send(okayMessage);

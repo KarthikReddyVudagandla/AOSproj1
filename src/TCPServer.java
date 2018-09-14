@@ -43,6 +43,7 @@ public void listenforinput(){
 //				
 //				System.out.println(address.getHostName());
 				NIobj.channels.add(socket);
+				//NIobj.neighbors.add(i);
 				
 				System.out.println("Client connection accepted by server"+NIobj.id+" #connections= "+ count + " "+NIobj.ClientConnectionCount[NIobj.id]);
 				

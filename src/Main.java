@@ -1,6 +1,7 @@
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 
 public class Main{
 	 static NodeInfo NIobj;
@@ -22,16 +23,20 @@ public class Main{
      
      StreamMsg m=new StreamMsg();
      m.type=MsgType.neighbor;
-     m.phaseNeighbors=NIobj.neighbors;
+     m.phaseNeighbors= new ArrayList<Integer>();
+     m.phaseNeighbors.add(NIobj.id);
      
    
     
      
      server.listenforinput();
      
+     while (NIobj.ClientConnectionCount[NIobj.id]!=NIobj.channels.size());
      BroadCast b= new BroadCast(NIobj.channels);
-     b.broadcast(m);
+     //b.broadcast(m);
     
+     kNeighbor kn=new kNeighbor(NIobj.id,NIobj.ClientConnectionCount[NIobj.id],b);
+     kn.start();
      
 	}
 
