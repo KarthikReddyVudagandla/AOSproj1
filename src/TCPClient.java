@@ -6,10 +6,9 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 public class TCPClient {
-
-  public TCPClient(NodeInfo NIobj,int curNode) {
+	public TCPClient(NodeInfo NIobj,int curNode, MsgListener l) {
 		//for(int i=0;i<NIobj.numOfNodes;i++){
-	     for(int i=0;i<curNode;i++){
+	    for(int i = 0; i < curNode; i++){
 			if(NIobj.adjMtx[curNode][i] == 1){
 				System.out.println("connecting nodes "+curNode+"'s client to server of "+i);
 				String hostName = NIobj.nodeInfo.get(i).host;
@@ -17,33 +16,27 @@ public class TCPClient {
 				InetAddress address = null;
 				try {
 					//System.out.println(hostName);
-					address = InetAddress.getByName(hostName);
-					
-				} catch (UnknownHostException e) {
+					address = InetAddress.getByName(hostName);					
+				}
+				catch (UnknownHostException e) {
 					e.printStackTrace();
 					System.exit(1);
 				}
 				Socket client = null;
 				try {
 					client = new Socket(address,port);
-				} catch (IOException e) {
+				}
+				catch (IOException e) {
 					System.out.println("Connection Broken");
 					e.printStackTrace();
 					System.exit(1);
 				}
 				//Send client request to all neighboring nodes
-				NIobj.channels.add( client);
+				NIobj.channels.add(client);
 				//NIobj.neighbors.add(i);
-				// For every client request start a new thread 
-				 new RunInThread(client,NIobj).start();
-				 
-				
-				
-			
-
+				//For every client request start a new thread 
+				new RunInThread(client, NIobj, l).start();
 			}
 		}	 
-	  
-  }	
-	
+	}		
 }
