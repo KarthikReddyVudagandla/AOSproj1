@@ -2,8 +2,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.concurrent.locks.ReentrantLock;
 
-
-
 //This algorithm works in phases
 //First send all immediate neighbors the new nodes added in the last phase, then receive the same
 //Second send okay to mark end of phase and start new phase only when okay received from all immediate neighbors
@@ -123,5 +121,10 @@ public class kNeighbor implements MsgListener {
 		terminateMessage.type = MsgType.terminate;
 		send(terminateMessage);
 		terminated = true;
+	}
+
+	@Override
+	public boolean isTerminated(){
+		return terminated;
 	}
 };

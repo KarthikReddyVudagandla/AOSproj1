@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.StreamCorruptedException;
 import java.net.Socket;
+import java.net.SocketException;
 
 public class RunInThread extends Thread {
 	Socket socket;
@@ -33,13 +34,27 @@ public class RunInThread extends Thread {
 			try {			
 				StreamMsg msg;
 				msg=(StreamMsg) ois.readObject();
-				//System.out.println("Message received: " + msg.type);
-				isRunning = l.receive(msg);
+
+				if(msg.type == MsgType.terminate){
+					isRunning = false;
+					socket.close();
+				}
+				if(!l.receive(msg)){
+					isRunning = false;
+				}
 				//System.out.println("neighbours msg recvd from "+socket.getRemoteSocketAddress().toString() +" "+ msg.phaseNeighbors);
 				//System.out.println(NIobj.id+"says: "+msg.NodeId +" said "+msg.msg +" and");
 				//System.out.println(msg.NodeId+ "'s neighbours are "+msg.neighbors);		
-				if(msg.type == MsgType.terminate){
+							}
+			catch(SocketException se){
+				if(l.isTerminated()){
+					//if program has terminated gracefully then cleanup
 					isRunning = false;
+				}
+				else{
+					//else show the exception
+					se.printStackTrace();
+					System.exit(2);
 				}
 			}
 			catch(StreamCorruptedException e) {

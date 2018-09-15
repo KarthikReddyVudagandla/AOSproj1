@@ -45,6 +45,9 @@ public class BroadCast implements Broadcaster{
 			oos.get(i).writeObject(m);
 			oos.get(i).flush();
 			//System.out.println(oos);
+			if(m.type == MsgType.terminate){
+				channels.get(i).close();
+			}
 		} 
 
 		catch (IOException e)
