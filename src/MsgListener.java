@@ -1,4 +1,4 @@
 
 public interface MsgListener {
-	public void receive(StreamMsg m);
+	public boolean receive(StreamMsg m);
 };

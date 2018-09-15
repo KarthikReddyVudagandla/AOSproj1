@@ -37,20 +37,27 @@ public class BroadCast implements Broadcaster{
     public void sendMessage(Integer i, StreamMsg m)
     {
 		// sendMessage - Converts message 'm' to to OutputStream 
-    	 
+    	 	if(channels.get(i).isClosed()){
+			System.out.println("Socket closed");
+		}
 		try {
-				//oos = new ObjectOutputStream(s.getOutputStream());
-				oos.get(i).writeObject(m);
-				oos.get(i).flush();
-				
-				//System.out.println(oos);
-			} 
+			//oos = new ObjectOutputStream(s.getOutputStream());
+			oos.get(i).writeObject(m);
+			oos.get(i).flush();
+			//System.out.println(oos);
+		} 
 
 		catch (IOException e)
-			{
-				System.out.println("cant send this msg");
-				e.printStackTrace();
+		{
+			//System.out.println("cant send this msg");
+			//e.printStackTrace();
+			System.out.println("Socket " + i  + " terminated before receiving " + m.type + " message.");
+			try{
+				channels.get(i).close();
 			}
-
+			catch(IOException ioe){
+				ioe.printStackTrace();
+			}
+		}
 	}
 }

@@ -50,8 +50,8 @@ public class kNeighbor implements MsgListener {
 	
 	//Upon receiving a new message
 	@Override
-	public void receive(StreamMsg m){
-		if(terminated) return;
+	public boolean receive(StreamMsg m){
+		if(terminated) return false;
 		l.lock();
 		if(m.type == MsgType.terminate){
 			terminateReceived++;
@@ -104,6 +104,8 @@ public class kNeighbor implements MsgListener {
 			}			
 		}
 		l.unlock();
+		if(terminated) return false;
+		else return true;
 	}
 	
 	void send(StreamMsg m){

@@ -15,11 +15,12 @@ public class RunInThread extends Thread {
 		this.socket=socket;
 		this.NIobj=NIobj;	
 		this.l = l;
-		activeThreads.add(this);
 	}
 
 	public void run() {
+		activeThreads.add(this);
 		ObjectInputStream ois = null;
+		boolean isRunning = true;
 		//DataInputStream dis=null;
 		try {
 			ois = new ObjectInputStream(socket.getInputStream());
@@ -28,15 +29,18 @@ public class RunInThread extends Thread {
 		catch (IOException e1) {
 			e1.printStackTrace();
 		}
-		while(true){
+		while(isRunning){
 			try {			
 				StreamMsg msg;
 				msg=(StreamMsg) ois.readObject();
 				//System.out.println("Message received: " + msg.type);
-				l.receive(msg);
+				isRunning = l.receive(msg);
 				//System.out.println("neighbours msg recvd from "+socket.getRemoteSocketAddress().toString() +" "+ msg.phaseNeighbors);
 				//System.out.println(NIobj.id+"says: "+msg.NodeId +" said "+msg.msg +" and");
 				//System.out.println(msg.NodeId+ "'s neighbours are "+msg.neighbors);		
+				if(msg.type == MsgType.terminate){
+					isRunning = false;
+				}
 			}
 			catch(StreamCorruptedException e) {
 				e.printStackTrace();
@@ -50,6 +54,12 @@ public class RunInThread extends Thread {
 				e.printStackTrace();
 				System.exit(2);
 			} 				
+		}
+		try{
+			socket.close();
+		}
+		catch(IOException ioe){
+			ioe.printStackTrace();
 		}
 	}
 
