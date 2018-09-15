@@ -10,7 +10,7 @@ public class TCPClient {
 		//for(int i=0;i<NIobj.numOfNodes;i++){
 	    for(int i = 0; i < curNode; i++){
 			if(NIobj.adjMtx[curNode][i] == 1){
-				System.out.println("connecting nodes "+curNode+"'s client to server of "+i);
+				//System.out.println("connecting nodes "+curNode+"'s client to server of "+i);
 				String hostName = NIobj.nodeInfo.get(i).host;
 				int port = NIobj.nodeInfo.get(i).port;
 				InetAddress address = null;

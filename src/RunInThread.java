@@ -28,26 +28,29 @@ public class RunInThread extends Thread {
 		catch (IOException e1) {
 			e1.printStackTrace();
 		}
-		try {			
-			StreamMsg msg;
-			msg=(StreamMsg) ois.readObject();
-			l.receive(msg);
-			//System.out.println("neighbours msg recvd from "+socket.getRemoteSocketAddress().toString() +" "+ msg.phaseNeighbors);
-			//System.out.println(NIobj.id+"says: "+msg.NodeId +" said "+msg.msg +" and");
-			//System.out.println(msg.NodeId+ "'s neighbours are "+msg.neighbors);		
+		while(true){
+			try {			
+				StreamMsg msg;
+				msg=(StreamMsg) ois.readObject();
+				//System.out.println("Message received: " + msg.type);
+				l.receive(msg);
+				//System.out.println("neighbours msg recvd from "+socket.getRemoteSocketAddress().toString() +" "+ msg.phaseNeighbors);
+				//System.out.println(NIobj.id+"says: "+msg.NodeId +" said "+msg.msg +" and");
+				//System.out.println(msg.NodeId+ "'s neighbours are "+msg.neighbors);		
+			}
+			catch(StreamCorruptedException e) {
+				e.printStackTrace();
+				System.exit(2);
+			}
+			catch (IOException e) {
+				e.printStackTrace();
+				System.exit(2);
+			}
+			catch (ClassNotFoundException e) {
+				e.printStackTrace();
+				System.exit(2);
+			} 				
 		}
-		catch(StreamCorruptedException e) {
-			e.printStackTrace();
-			System.exit(2);
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-			System.exit(2);
-		}
-		catch (ClassNotFoundException e) {
-			e.printStackTrace();
-			System.exit(2);
-		} 				
 	}
 
 	static ArrayList<Thread> activeThreads = new ArrayList<Thread>();

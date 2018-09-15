@@ -15,8 +15,8 @@ public class kNeighbor implements MsgListener {
 	Integer phase;//current phase
 	HashSet<Integer> neighborsDiscovered;//hashset to ensure no node is added twice
 	Integer immediateNeighbors;
-	Integer currentPhaseReceived;//variable to keep track of how many immediate neighbors contacted this node
-	Integer okayReceived;//varialbe to keep track how many immediate neighbors have sent okay
+	volatile Integer currentPhaseReceived;//variable to keep track of how many immediate neighbors contacted this node
+	volatile Integer okayReceived;//varialbe to keep track how many immediate neighbors have sent okay
 	Integer terminateReceived;//variable to track how many immediate neighbors have terminated
 	boolean change;//variable to check if any change occurred in current phase
 	boolean toTerminate;
@@ -29,6 +29,7 @@ public class kNeighbor implements MsgListener {
 		phase = 0;
 		this.nodeid = nodeid;
 		neighborsDiscovered = new HashSet<Integer>();
+		neighborsDiscovered.add(nodeid);
 		immediateNeighbors = neighborCount;
 		currentPhaseReceived = 0;
 		okayReceived = 0;
@@ -43,6 +44,7 @@ public class kNeighbor implements MsgListener {
 		StreamMsg m = new StreamMsg();
 		m.phaseNeighbors = new ArrayList<Integer>();
 		m.phaseNeighbors.add(nodeid);
+		m.type = MsgType.neighbor;
 		this.send(m);
 	}
 	
@@ -60,7 +62,7 @@ public class kNeighbor implements MsgListener {
 				//Check if neighbor is already discovered
 				if(!neighborsDiscovered.contains(phaseNeighbor)){
 					change = true;
-					if(kHopNeighbors.size() < phase){
+					if(kHopNeighbors.size() < phase + 1){
 						kHopNeighbors.add(new ArrayList<Integer>());
 					}			
 					kHopNeighbors.get(phase).add(phaseNeighbor);
@@ -74,7 +76,9 @@ public class kNeighbor implements MsgListener {
 					//Terminate
 					toTerminate = true;
 				}
-				System.out.println("kHopNeighbors phase " + phase + "; neighbours " + kHopNeighbors.get(phase));
+				else{
+					System.out.println("kHopNeighbors phase " + phase + "; neighbours " + kHopNeighbors.get(phase));
+				}
 				if(toTerminate){
 					sendTerminate();//Terminate message also acts like okay message. It's like okay and terminate
 				}

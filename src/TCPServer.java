@@ -26,7 +26,7 @@ public class TCPServer {
 			System.exit(1);
 		}
 		try {
-			Thread.sleep(50000);
+			Thread.sleep(5000);
 		}
 		catch (InterruptedException e) {
 			e.printStackTrace();
@@ -36,7 +36,7 @@ public class TCPServer {
 	public void listenforinput(MsgListener l){
 		//Listen and accept for any client connections
 		int count=0;
-		try {
+		//try{	
 			while (NIobj.ClientConnectionCount[NIobj.id]!=NIobj.channels.size()) {
 				try {
 					socket = listener.accept();
@@ -51,9 +51,9 @@ public class TCPServer {
 					
 					if(count==NIobj.ClientConnectionCount[NIobj.id])
 					{
-						System.out.println("Connections Done");
+						//System.out.println("Connections Done");
 						NIobj.ConnDone=true;
-						System.out.println("id: "+ NIobj.id+" neighbours "+ NIobj.neighbors + " connections Done is "+NIobj.ConnDone);
+						//System.out.println("id: "+ NIobj.id+" neighbours "+ NIobj.neighbors + " connections Done is "+NIobj.ConnDone);
 						
 					}
 				} 
@@ -62,16 +62,16 @@ public class TCPServer {
 					System.exit(1);
 				}
 				// For every client request start a new thread 
-				new RunInThread(socket,NIobj, l).start();
+				new RunInThread(socket, NIobj, l).start();
 			}
-		}
-		finally {
+		//}
+		/*finally {
 			try {
 				listener.close();
 			} 
 			catch (IOException e) {
 				e.printStackTrace();
 			}
-		}
+		}*/
 	}		
 }
