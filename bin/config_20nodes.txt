@@ -1,0 +1,46 @@
+
+# nodes 
+20 
+
+0 dc40.utdallas.edu 2222 # nodeID hostName listen Port
+1 dc01.utdallas.edu 2222
+2 dc02.utdallas.edu 2222
+3 dc03.utdallas.edu 2222
+4 dc04.utdallas.edu 2222
+5 dc05.utdallas.edu 2222
+6 dc06.utdallas.edu 2222
+7 dc07.utdallas.edu 2222
+8 dc08.utdallas.edu 2222
+9 dc09.utdallas.edu 2222
+10 dc11.utdallas.edu 2222
+11 dc11.utdallas.edu 2222
+12 dc12.utdallas.edu 2222
+13 dc13.utdallas.edu 2222
+14 dc14.utdallas.edu 2222
+15 dc15.utdallas.edu 2222
+16 dc16.utdallas.edu 2222
+17 dc17.utdallas.edu 2222
+18 dc18.utdallas.edu 2222
+19 dc19.utdallas.edu 2222
+
+
+0 	1	2	15
+1 	0	2	3
+2 	0	1	4	8
+3 	1	4
+4 	2	3	5
+5 	4	6
+6 	5	7	8
+7 	6	9	13	17
+8 	2	6
+9 	7	14
+10  	11 	
+11	10	12	19
+12 	11	
+13	7	18
+14	9	19
+15	0	16
+16	15
+17	7	
+18	13
+19	11	14
