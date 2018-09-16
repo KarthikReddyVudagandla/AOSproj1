@@ -7,7 +7,7 @@ public class StreamMsg implements Serializable {
 	ArrayList<Integer> phaseNeighbors;
 
 	public StreamMsg(){
-		phaseNeighbors = null;
+		phaseNeighbors = new ArrayList<Integer>();
 		type = MsgType.neighbor;
 	}
 }

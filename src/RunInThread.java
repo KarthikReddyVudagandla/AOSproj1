@@ -61,6 +61,7 @@ public class RunInThread extends Thread {
 				}
 				else{
 					//else show the exception
+					System.out.println("Exception from socket id: " + socket.getRemoteSocketAddress());
 					se.printStackTrace();
 					System.exit(2);
 				}
@@ -78,19 +79,23 @@ public class RunInThread extends Thread {
 				}
 				else{
 					//else show the exception
+					System.out.println("Exception from socket id: " + socket.getRemoteSocketAddress());
 					eofe.printStackTrace();
 					System.exit(2);
 				}
 			}
 			catch(StreamCorruptedException e) {
+				System.out.println("Exception from socket id: " + socket.getRemoteSocketAddress());
 				e.printStackTrace();
 				System.exit(2);
 			}
 			catch (IOException e) {
+				System.out.println("Exception from socket id: " + socket.getRemoteSocketAddress());
 				e.printStackTrace();
 				System.exit(2);
 			}
 			catch (ClassNotFoundException e) {
+				System.out.println("Exception from socket id: " + socket.getRemoteSocketAddress());
 				e.printStackTrace();
 				System.exit(2);
 			} 				

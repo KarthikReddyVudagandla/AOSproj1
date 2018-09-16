@@ -49,61 +49,64 @@ public class kNeighbor implements MsgListener {
 	//Upon receiving a new message
 	@Override
 	public boolean receive(StreamMsg m){
-		if(terminated) return false;
 		l.lock();
-		if(m.type == MsgType.terminate){
-			terminateReceived++;
-			toTerminate = true;
-		}
-		//phase n.1
-		if(m.type == MsgType.neighbor){				
-			for(Integer phaseNeighbor : m.phaseNeighbors){
-				//Check if neighbor is already discovered
-				if(!neighborsDiscovered.contains(phaseNeighbor)){
-					change = true;
-					if(kHopNeighbors.size() < phase + 1){
-						kHopNeighbors.add(new ArrayList<Integer>());
-					}			
-					kHopNeighbors.get(phase).add(phaseNeighbor);
-					neighborsDiscovered.add(phaseNeighbor);
-				}
-			}
-		
-			currentPhaseReceived++;
-		}
-		if(currentPhaseReceived + terminateReceived == immediateNeighbors){
-			if(!change){
-				//Terminate
+		if(!terminated)
+		{
+			if(m.type == MsgType.terminate){
+				terminateReceived++;
 				toTerminate = true;
 			}
-			else{
-				System.out.println("kHopNeighbors phase " + phase + "; neighbours " + kHopNeighbors.get(phase));
-			}
-			if(toTerminate && !change){
-				sendTerminate();//Terminate message also acts like okay message. It's like okay and terminate
-			}
-			else{
-				sendOkay();					
-			}
-			phase++;
-			currentPhaseReceived = 0;//reset
-			change = false;
-		}
-		
-		//phase n.2
-		else if(m.type == MsgType.okay || m.type == MsgType.terminate){
-			okayReceived++;
-			if(okayReceived == immediateNeighbors){
-				StreamMsg m1 = new StreamMsg();
-				//m.phaseNo = phase;
-				if(!terminated){
-					m1.type = MsgType.neighbor;
-					m1.phaseNeighbors = kHopNeighbors.get(phase-1);
-					System.out.println("Sending neighbors: " + m1.phaseNeighbors);
-					send(m1);
+			//phase n.1
+			if(m.type == MsgType.neighbor){				
+				for(Integer phaseNeighbor : m.phaseNeighbors){
+					//Check if neighbor is already discovered
+					if(!neighborsDiscovered.contains(phaseNeighbor)){
+						change = true;
+						if(kHopNeighbors.size() < phase + 1){
+							kHopNeighbors.add(new ArrayList<Integer>());
+						}			
+						kHopNeighbors.get(phase).add(phaseNeighbor);
+						neighborsDiscovered.add(phaseNeighbor);
+					}
 				}
-				okayReceived = 0;
-			}			
+		
+				currentPhaseReceived++;
+			}
+					
+			//phase n.2
+			else if(m.type == MsgType.okay || m.type == MsgType.terminate){
+				okayReceived++;
+				if(okayReceived == immediateNeighbors){
+					StreamMsg m1 = new StreamMsg();
+					//m.phaseNo = phase;
+					if(!terminated){
+						m1.type = MsgType.neighbor;
+						m1.phaseNeighbors = kHopNeighbors.get(phase-1);
+						System.out.println("Sending neighbors: " + m1.phaseNeighbors);
+						send(m1);
+					}
+					okayReceived = 0;
+				}			
+			}
+
+			if(currentPhaseReceived + terminateReceived == immediateNeighbors){
+				if(!change){
+					//Terminate
+					toTerminate = true;
+				}
+				else{
+					System.out.println("kHopNeighbors phase " + phase + "; neighbours " + kHopNeighbors.get(phase));
+				}
+				if(toTerminate && !change){
+					sendTerminate();//Terminate message also acts like okay message. It's like okay and terminate
+				}
+				else{
+					sendOkay();					
+				}
+				phase++;
+				currentPhaseReceived = 0;//reset
+				change = false;
+			}
 		}
 		l.unlock();
 		if(terminated) return false;
