@@ -12,7 +12,7 @@
 7 dc07.utdallas.edu 2222
 8 dc08.utdallas.edu 2222
 9 dc09.utdallas.edu 2222
-10 dc11.utdallas.edu 2222
+10 dc10.utdallas.edu 2222
 11 dc11.utdallas.edu 2222
 12 dc12.utdallas.edu 2222
 13 dc13.utdallas.edu 2222
