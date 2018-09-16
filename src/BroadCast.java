@@ -38,7 +38,8 @@ public class BroadCast implements Broadcaster{
     {
 		// sendMessage - Converts message 'm' to to OutputStream 
     	 	if(channels.get(i).isClosed()){
-			System.out.println("Socket closed");
+			//System.out.println("Socket closed");
+			return;
 		}
 		try {
 			//oos = new ObjectOutputStream(s.getOutputStream());
@@ -46,6 +47,7 @@ public class BroadCast implements Broadcaster{
 			oos.get(i).flush();
 			//System.out.println(oos);
 			if(m.type == MsgType.terminate){
+				Thread.sleep(2000);
 				channels.get(i).close();
 			}
 		} 
@@ -61,6 +63,9 @@ public class BroadCast implements Broadcaster{
 			catch(IOException ioe){
 				ioe.printStackTrace();
 			}
+		}
+		catch (InterruptedException ie){
+			ie.printStackTrace();
 		}
 	}
 }

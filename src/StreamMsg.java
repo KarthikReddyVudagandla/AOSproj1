@@ -5,4 +5,9 @@ public class StreamMsg implements Serializable {
 	//int NodeId;	
 	MsgType type;
 	ArrayList<Integer> phaseNeighbors;
+
+	public StreamMsg(){
+		phaseNeighbors = null;
+		type = MsgType.neighbor;
+	}
 }

@@ -17,7 +17,7 @@ public class kNeighbor implements MsgListener {
 	volatile Integer okayReceived;//varialbe to keep track how many immediate neighbors have sent okay
 	Integer terminateReceived;//variable to track how many immediate neighbors have terminated
 	boolean change;//variable to check if any change occurred in current phase
-	boolean toTerminate;
+	volatile boolean toTerminate;
 	boolean terminated;//varaible to track end of algorithm
 	Broadcaster b;
 	
@@ -55,6 +55,7 @@ public class kNeighbor implements MsgListener {
 			terminateReceived++;
 			toTerminate = true;
 		}
+		//phase n.1
 		if(m.type == MsgType.neighbor){				
 			for(Integer phaseNeighbor : m.phaseNeighbors){
 				//Check if neighbor is already discovered
@@ -67,27 +68,29 @@ public class kNeighbor implements MsgListener {
 					neighborsDiscovered.add(phaseNeighbor);
 				}
 			}
-			
+		
 			currentPhaseReceived++;
-			if(currentPhaseReceived + terminateReceived == immediateNeighbors){
-				if(!change){
-					//Terminate
-					toTerminate = true;
-				}
-				else{
-					System.out.println("kHopNeighbors phase " + phase + "; neighbours " + kHopNeighbors.get(phase));
-				}
-				if(toTerminate){
-					sendTerminate();//Terminate message also acts like okay message. It's like okay and terminate
-				}
-				else{
-					sendOkay();					
-				}
-				phase++;
-				currentPhaseReceived = 0;//reset
-				change = false;
-			}
 		}
+		if(currentPhaseReceived + terminateReceived == immediateNeighbors){
+			if(!change){
+				//Terminate
+				toTerminate = true;
+			}
+			else{
+				System.out.println("kHopNeighbors phase " + phase + "; neighbours " + kHopNeighbors.get(phase));
+			}
+			if(toTerminate && !change){
+				sendTerminate();//Terminate message also acts like okay message. It's like okay and terminate
+			}
+			else{
+				sendOkay();					
+			}
+			phase++;
+			currentPhaseReceived = 0;//reset
+			change = false;
+		}
+		
+		//phase n.2
 		else if(m.type == MsgType.okay || m.type == MsgType.terminate){
 			okayReceived++;
 			if(okayReceived == immediateNeighbors){
@@ -96,6 +99,7 @@ public class kNeighbor implements MsgListener {
 				if(!terminated){
 					m1.type = MsgType.neighbor;
 					m1.phaseNeighbors = kHopNeighbors.get(phase-1);
+					System.out.println("Sending neighbors: " + m1.phaseNeighbors);
 					send(m1);
 				}
 				okayReceived = 0;
@@ -111,16 +115,18 @@ public class kNeighbor implements MsgListener {
 	}
 	
 	void sendOkay(){
+		System.out.println("Sending Okay");
 		StreamMsg okayMessage = new StreamMsg();
 		okayMessage.type = MsgType.okay;
 		send(okayMessage);
 	}
 	
 	void sendTerminate(){
+		terminated = true;
+		System.out.println("Sending Terminate");
 		StreamMsg terminateMessage = new StreamMsg();
 		terminateMessage.type = MsgType.terminate;
 		send(terminateMessage);
-		terminated = true;
 	}
 
 	@Override

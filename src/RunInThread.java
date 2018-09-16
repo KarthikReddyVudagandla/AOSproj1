@@ -6,6 +6,7 @@ import java.io.ObjectInputStream;
 import java.io.StreamCorruptedException;
 import java.net.Socket;
 import java.net.SocketException;
+import java.io.EOFException;
 
 public class RunInThread extends Thread {
 	Socket socket;
@@ -16,10 +17,10 @@ public class RunInThread extends Thread {
 		this.socket=socket;
 		this.NIobj=NIobj;	
 		this.l = l;
+		activeThreads.add(this);
 	}
 
 	public void run() {
-		activeThreads.add(this);
 		ObjectInputStream ois = null;
 		boolean isRunning = true;
 		//DataInputStream dis=null;
@@ -36,6 +37,7 @@ public class RunInThread extends Thread {
 				msg=(StreamMsg) ois.readObject();
 
 				if(msg.type == MsgType.terminate){
+					System.out.println("Terminate received");
 					isRunning = false;
 					socket.close();
 				}
@@ -45,15 +47,38 @@ public class RunInThread extends Thread {
 				//System.out.println("neighbours msg recvd from "+socket.getRemoteSocketAddress().toString() +" "+ msg.phaseNeighbors);
 				//System.out.println(NIobj.id+"says: "+msg.NodeId +" said "+msg.msg +" and");
 				//System.out.println(msg.NodeId+ "'s neighbours are "+msg.neighbors);		
-							}
+			}
 			catch(SocketException se){
 				if(l.isTerminated()){
 					//if program has terminated gracefully then cleanup
 					isRunning = false;
+					try{
+						socket.close();
+					}
+					catch(IOException ioe){
+						ioe.printStackTrace();
+					}
 				}
 				else{
 					//else show the exception
 					se.printStackTrace();
+					System.exit(2);
+				}
+			}
+			catch(EOFException eofe){
+				if(l.isTerminated()){
+					//if program has terminated gracefully then cleanup
+					isRunning = false;
+					try{
+						socket.close();
+					}
+					catch(IOException ioe){
+						ioe.printStackTrace();
+					}
+				}
+				else{
+					//else show the exception
+					eofe.printStackTrace();
 					System.exit(2);
 				}
 			}
@@ -82,8 +107,8 @@ public class RunInThread extends Thread {
 
 	public static void joinAllThreads(){
 		try{
-			for(Thread t : activeThreads){
-				t.join();
+			for(int i = 0; i < activeThreads.size(); i++){
+				activeThreads.get(i).join();
 			}
 		}
 		catch(InterruptedException e){
